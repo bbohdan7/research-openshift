@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-processor-backend
+  labels:
+    app: payment-processor-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-processor-backend
+  template:
+    metadata:
+      labels:
+        app: payment-processor-backend
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: was
+        image: myregistry.localhost/wasapp
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+        - containerPort: 9443
+        volumeMounts:
+        - name: proj
+          mountPath: /opt/ibm/wlp/usr/servers/wasapp/dropins/
+      initContainers:
+      - name: git-init
+        image: alpine
+        command: ["/bin/sh", "-c"]
+        args: ["apk update && apk add git ; git clone https://github.com/zbogdan7/payment-processor /tmp/ "] 
+        volumeMounts:
+        - name: proj
+          mountPath: /tmp/
+      - name: build
+        image: maven
+        volumeMounts:
+        - name: proj
+          mountPath: /tmp/
+        command: ["/bin/sh", "-c"]
+        args: ["mvn --file /tmp/ package"]
+      - name: deploy
+        image: alpine
+        volumeMounts:
+        - name: proj
+          mountPath: /tmp/
+        command: ["/bin/sh", "-c"]
+        args: ["mkdir /app ; mv /tmp/target/payment-processor.war /app ; rm -rf /tmp/* ; mv /app/payment-processor.war /tmp/"]
+      volumes:
+      - name: proj
+        emptyDir: {} 

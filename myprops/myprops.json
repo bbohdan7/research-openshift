@@ -1,0 +1,8 @@
+{
+  "helloWorld": [
+    "one", "two", "three"
+  ],
+  "goodbye": [
+    "four", "five", "six"
+  ]
+}

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-processor-mysql
+  labels:
+    app: payment-processor-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-processor-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: payment-processor-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:latest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: payment-processor-root
+              key: password
+        volumeMounts:
+        - name: migration
+          mountPath: /migration
+        - name: main-storage
+          mountPath: /var/lib/mysql
+        ports:
+        - name: mysql
+          containerPort: 3306
+      volumes:
+      - name: migration
+        configMap:
+          name: payment-processor-db
+      - name: main-storage
+        persistentVolumeClaim:
+          claimName: payment-processor-storage-claim

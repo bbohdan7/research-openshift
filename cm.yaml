@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cm-test
+  labels:
+    app: cm-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cm-test
+  template:
+    metadata:
+      labels:
+        app: cm-test
+    spec:
+      volumes:
+      - name: my-storage
+        configMap:
+          name: map-of-props
+      - name: my-config-map
+        configMap:
+          name: myconfigmap
+      - name: test-storage
+        emptyDir: {}
+      containers:
+      - name: alp
+        image: alpine
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: my-storage
+          mountPath: /mystorage
+        - name: my-config-map
+          mountPath: /myconfigmap
+        - name: test-storage
+          mountPath: /bbbb
+          subPath: text.txt
+        command: ["/bin/sh", "-c"]
+        args: ["while : ; do echo HELLO_WORLD ; sleep 1 ; done ;"]
+      initContainers:
+      - name: fillout
+        image: myregistry.localhost/alpine-tst
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: test-storage
+          mountPath: /blabla
+          subPath: text.txt
+        command: ["/bin/sh", "-c"]
+        args: ["for i in `seq 30` ; do sleep 1 ; done ;"]

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wasapp
+  labels:
+    app: wasapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wasapp
+  template:
+    metadata:
+      labels:
+        app: wasapp
+    spec:
+      volumes:
+      - name: wasapp-volume
+        emptyDir: {}
+      containers:
+        - name: wasapp
+          image: zbohdan7/wasapp
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 9080
+          - containerPort: 9443
+          volumeMounts:
+          - name: wasapp-volume
+            mountPath: /opt/ibm/wlp/usr/servers/wasapp/dropins
+#      imagePullSecrets:
+#      - name: docker-registry
+      initContainers:
+      - name: git-init # Step 1: Downloading (cloning) Java projects with Git 
+        image: alpine
+        command: ["/bin/sh", "-c"]
+        args: ["apk update && apk add git && git clone https://github.com/zbogdan7/wasapp /tmp/"]
+        volumeMounts:
+        - name: wasapp-volume
+          mountPath: /tmp
+      - name: maven-build # Step 2: Building cloned by git project with Maven
+        image: maven
+        volumeMounts:
+        - name: wasapp-volume
+          mountPath: /tmp
+        command: ["/bin/sh", "-c"]
+        args: ["mvn --file /tmp package"]
+      - name: cleanup-and-deploy # Step 3: Liberty requires the dropins directory contains at least ony WAR file, this we need to move it out from the target directory and clean up everythink just to keep only wastest.war
+        image: alpine
+        volumeMounts:
+        - name: wasapp-volume
+          mountPath: /tmp
+        command: ['/bin/sh', '-c']
+        args: ["mkdir /tmp2 && mv /tmp/target/wastest.war /tmp2/ && rm -rf /tmp/* && mv /tmp2/wastest.war /tmp/"]

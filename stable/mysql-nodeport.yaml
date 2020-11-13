@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-processor-mysql-external
+  labels:
+    app: payment-processor-mysql
+spec:
+  selector:
+    app: payment-processor-mysql
+  type: NodePort
+  ports:
+  - port: 3306
+    targetPort: 3306
+    nodePort: 32323

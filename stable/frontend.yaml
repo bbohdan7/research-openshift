@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-processor-frontend
+  labels:
+    app: payment-processor-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-processor-frontend
+  template:
+    metadata:
+      labels:
+        app: payment-processor-frontend
+    spec:
+      containers:
+      - name: wasapp-frontend
+        image: myregistry.localhost/wasapp-frontend
+        ports:
+        - containerPort: 3000
+        stdin: true
+        tty: true
