@@ -1,0 +1,8 @@
+alias all="clear ; kubectl get all -o wide" ; 
+alias del="kubectl delete all --selector " ;
+alias crt="kubectl create -f " ; 
+alias get="kubectl get " ; 
+alias logs="kubectl logs " ;
+alias repos="curl --insecure https://myregistry.localhost/v2/_catalog" ;
+alias nodes="kubectl get nodes -o wide" ;
+alias exe="kubectl exec -it " ;
