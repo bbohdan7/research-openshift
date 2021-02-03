@@ -32,6 +32,8 @@ spec:
           mountPath: /cert
         - name: reg-key
           mountPath: /key
+        - name: main-storage
+          mountPath: "/var/lib/registry"
       volumes:
       - name: reg-cert
         configMap:
@@ -39,3 +41,6 @@ spec:
       - name: reg-key
         configMap:
           name: registry-key 
+      - name: main-storage
+        persistentVolumeClaim:
+          claimName: registry-storage-claim
