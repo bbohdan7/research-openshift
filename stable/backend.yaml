@@ -17,7 +17,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: was
-        image: myregistry.localhost/wasapp
+        image: bogdan.reg:31777/wasapp
         imagePullPolicy: Always
         ports:
         - containerPort: 9080
