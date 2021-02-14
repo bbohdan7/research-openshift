@@ -31,6 +31,14 @@ annotations: {}`
 * Finally, apply that file by running a command:
 `$> helm install jenkins -n jenkins -f jenkins-deploy.yaml jenkins/jenkins`
 
+* Additionally, you can list all the Helm's releases by running this command:
+`$>helm list --all-namespaces` or `$>helm list -n jenkins` to see the specific namespace releases
+
+* Also, you may want to delete Jenkins deployment with this command:
+`$>helm uninstall jenkins -n jenkins`
+
+## Using already deployed Jenkins application
+
 * After your Jenkins App is ready with 2/2 pods, try to access the app from outside using your NodePort.
 * Jenkins will ask you to login with username/password, you should use an admin credentials where password you can take from secrets:
 `$>$pass=$(kubectl get secret jenkins -njenkins -o jsonpath="{.data.jenkins-admin-password}")`
