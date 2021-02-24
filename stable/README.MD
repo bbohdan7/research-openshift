@@ -1,5 +1,3 @@
-![](schema.png)
-
 # Deployment steps explained
 
 Let me clarify all of the steps a deployer should make to have this whole application work
@@ -17,3 +15,9 @@ Let me clarify all of the steps a deployer should make to have this whole applic
 * Deploy services for backend
 * Build frontend image, push it to the registry and deploy the last _frontend.yaml_ and its services (**NodePort** is necessary because the frontend is the last and the only entrypoint into your application)
 * That's it, the simple microservice-based application running on the Kubernetes cluster. **Enjoy!**
+
+Microservice interaction
+![](schema.png)
+
+Pod architecture
+![](pod.png)
