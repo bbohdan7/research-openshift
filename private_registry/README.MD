@@ -1,4 +1,4 @@
-# Private Docker Registry
+# Private Docker Registry ![docker registry]('https://miro.medium.com/max/802/1*w8GwB2lHibFKRD1CpO1P6g.png')
 
 Before you begin to deploy this deployment you should generate self-signed certificates by OpenSSL.
 
