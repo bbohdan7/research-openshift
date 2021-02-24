@@ -1,4 +1,4 @@
-# Private Docker Registry ![docker registry]('./docker.png')
+# Private Docker Registry
 
 Before you begin to deploy this deployment you should generate self-signed certificates by OpenSSL.
 
