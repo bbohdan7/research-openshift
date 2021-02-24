@@ -1,3 +1,5 @@
+![](https://labs.consol.de/assets/images/Kubernetes-OpenShift-Logo.png)
+
 # This Repository contains deployment descriptors which were successfully tested on both [Kubernetes](https://github.com/kubernetes/kubernetes) and [OpenShift](https://github.com/openshift)
 
 Approximate description of content:
