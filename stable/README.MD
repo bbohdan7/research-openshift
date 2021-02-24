@@ -1,3 +1,5 @@
+![](schema.png)
+
 # Deployment steps explained
 
 Let me clarify all of the steps a deployer should make to have this whole application work
