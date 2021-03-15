@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: task-second
+  namespace: bogdan
+spec:
+  steps:
+  - name: greet-response
+    image: alpine
+    command:
+    - echo
+    args:
+    - "World is greets you in respond"
+    

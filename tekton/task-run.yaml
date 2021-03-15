@@ -1,0 +1,8 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: task-run-first
+  namespace: bogdan
+spec:
+  taskRef:
+    name: task-first

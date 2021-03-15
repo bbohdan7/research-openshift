@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: wasapp-image
+  namespace: bogdan
+spec:
+  type: image
+  params:
+  - name: url
+    value: bogdan.reg:31777/tekton-wasapp

@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name:  echo-pipeline-run
+  namespace: bogdan
+spec:
+  pipelineRef:
+    name: echo-pipeline
+  resources:
+  - name: wasapp-repo
+    resourceRef:
+      name: wasapp-repo
+  - name: wasapp-image
+    resourceRef:
+      name: wasapp-image

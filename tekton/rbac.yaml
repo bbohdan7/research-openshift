@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: trigger-account
+  namespace: bogdan
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: trigger-account
+  namespace: bogdan
+rules:
+# EventListeners need to be able to fetch all namespaced resources
+- apiGroups: ["triggers.tekton.dev"]
+  resources: ["eventlisteners", "triggerbindings", "triggertemplates", "triggers"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+# configmaps is needed for updating logging config
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+# Permissions to create resources in associated TriggerTemplates
+- apiGroups: ["tekton.dev"]
+  resources: ["pipelineruns", "pipelineresources", "taskruns"]
+  verbs: ["create"]
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: ["impersonate"]
+- apiGroups: ["policy"]
+  resources: ["podsecuritypolicies"]
+  resourceNames: ["tekton-triggers"]
+  verbs: ["use"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: trigger-account
+  namespace: bogdan
+subjects:
+- kind: ServiceAccount
+  name: trigger-account
+  namespace: bogdan
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: trigger-account
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: trigger-account
+rules:
+  # EventListeners need to be able to fetch any clustertriggerbindings
+- apiGroups: ["triggers.tekton.dev"]
+  resources: ["clustertriggerbindings", "clusterinterceptors"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: trigger-account
+subjects:
+- kind: ServiceAccount
+  name: trigger-account
+  namespace: bogdan
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: trigger-account

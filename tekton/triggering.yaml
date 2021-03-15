@@ -1,0 +1,71 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: hello-interceptor
+  namespace: bogdan
+spec:
+  serviceAccountName: trigger-account
+  triggers:
+  - name: github-listener
+    interceptors:
+    - github:
+#        secretRef:
+#          secretName: github-secret
+#          secretKey: secretToken
+        eventTypes:
+        - push
+#    - cel:
+#        filter: "body.action in ['opened', 'synchronize', 'reopened']"
+    bindings:
+    - ref: github-trigger-binding
+    template:
+      ref: github-template
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: github-trigger-binding
+  namespace: bogdan
+spec:
+  params:
+  - name: revision
+    value: $(body.after)
+  - name: url
+    value: $(body.repository.html_url)
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-template
+  namespace: bogdan
+spec:
+  params:
+  - name: revision
+  - name: url
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1alpha1
+    kind: TaskRun
+    metadata:
+      generateName: github-run-
+      namespace: bogdan
+    spec:
+      taskSpec:
+        inputs:
+          resources:
+          - name: source
+            type: git
+        steps:
+        - image: ubuntu
+          script: |
+             #! /bin/sh
+             ls -alt $(inputs.resources.source.path)
+      inputs:
+        resources:
+        - name: source
+          resourceSpec:
+            type: git
+            params:
+            - name: revision
+              value: $(tt.params.revision)
+            - name: url
+              value: $(tt.params.url)

@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: echo-pipeline
+  namespace: bogdan
+spec:
+  resources:
+  - name: wasapp-repo
+    type: git
+  - name: wasapp-image
+    type: image
+  tasks:
+  - name: first-task
+    taskRef:
+      name: echo-hello-world
+    resources:
+      inputs:
+      - name: wasapp-repo
+        resource: wasapp-repo
+      outputs:
+      - name: wasapp-image
+        resource: wasapp-image
