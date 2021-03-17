@@ -1,0 +1,42 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-task
+  namespace: bogdan
+spec:
+  params:
+  - name: dockerfile
+    default: $(resources.inputs.docker-source.path)/Dockerfile
+    type: string
+  - name: pathContext
+    type: string
+    default: $(resources.inputs.docker-source.path)
+  resources:
+    inputs:
+    - name: docker-source
+      type: git
+    outputs:
+    - name: builtImage
+      type: image
+  steps:
+  - name: build-and-push
+    image: buildah/buildah
+    command:
+    - buildah
+    args:
+    - bud
+    - --tag=$(resources.outputs.builtImage.url)
+    - --file=$(params.dockerfile)
+    - --$(params.pathContext)
+#    image: gcr.io/kaniko-project/executor:v0.16.0
+#    env:
+#    - name: "DOCKER_CONFIG"
+#      value: "/tekton/home/.docker/"
+#    - /kaniko/executor
+#    args: [""]
+#    - --dockerfile=$(params.dockerfile)
+#    - --destination=$(resources.outputs.builtImage.url)
+#    - --context=$(params.pathContext)
+#    - --insecure
+#    - --insecure-registry
+#    - --insecure-pull

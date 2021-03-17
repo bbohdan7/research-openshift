@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: my-input
+  namespace: bogdan
+spec:
+  type: git
+  params:
+  - name: revision
+    value: master
+  - name: url
+    value: https://github.com/zbogdan7/payment-processor-frontend
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: my-output
+  namespace: bogdan
+spec:
+  type: image
+  params:
+  - name: url
+    value: registry-app-svc.default/dockerize
