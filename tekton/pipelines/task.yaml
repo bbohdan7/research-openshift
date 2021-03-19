@@ -21,13 +21,16 @@ spec:
   steps:
   - name: build-and-push
     image: buildah/buildah
+    securityContext:
+      privileged: true
     command:
     - buildah
     args:
     - bud
     - --tag=$(resources.outputs.builtImage.url)
     - --file=$(params.dockerfile)
-    - --$(params.pathContext)
+    - --tls-verify=false
+    - $(params.pathContext)
 #    image: gcr.io/kaniko-project/executor:v0.16.0
 #    env:
 #    - name: "DOCKER_CONFIG"
