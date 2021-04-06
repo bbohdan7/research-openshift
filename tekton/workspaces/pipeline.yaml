@@ -1,0 +1,99 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: writer
+  namespace: bogdan
+spec:
+  steps:
+  - name: write
+    image: ubuntu
+    imagePullPolicy: IfNotPresent
+    script: |
+      echo helloworld! > $(workspaces.my-space.path)/myfile
+      ls -alt $(workspaces.my-space.path)
+  workspaces:
+  - name: my-space
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: reader
+  namespace: bogdan
+spec:
+  params:
+  - name: dir1
+    type: string
+  - name: dir2
+    type: string
+  steps:
+  - name: read-1
+    image: ubuntu
+    script: |
+      ls -alt $(workspaces.my-space.path)/
+      #cat $(workspaces.my-space.path)/$(params.dir1)/myfile
+  - name: read-2
+    image: ubuntu
+    imagePullPolicy: IfNotPresent
+    script: |
+      ls -alt $(workspaces.my-space.path)/
+      #cat $(workspaces.my-space.path)/$(params.dir2)/myfile
+  workspaces:
+  - name: my-space
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-read-write
+  namespace: bogdan
+spec:
+  workspaces:
+  - name: pipeline-space
+  tasks:
+  - name: writer-1
+    taskRef:
+      name: writer
+    workspaces:
+    - name: my-space
+      workspace: pipeline-space
+      subPath: $(params.dir1)
+  - name: writer-2
+    taskRef:
+      name: writer
+    runAfter: 
+    - writer-1
+    workspaces:
+    - name: my-space
+      workspace: pipeline-space
+      subPath: $(params.dir2)
+  - name: read-all
+    taskRef:
+      name: reader
+    runAfter:
+    - writer-2
+    workspaces:
+    - name: my-space
+      workspace: pipeline-space
+    params:
+    - name: dir1
+      value: firstDirectory
+    - name: dir2
+      value: secondDirectory
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: read-write-pipeline-run
+  namespace: bogdan
+spec:
+  pipelineRef:
+    name: pipeline-read-write
+  workspaces:
+  - name: pipeline-space
+    volumeClaimTemplate:
+      spec:
+        storageClassName: manual
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 500Mi

@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: build-task-with-deploy-run
+  namespace: bogdan
+spec:
+  taskRef:
+    name: deploy-task
+  resources:
+    inputs:
+    - name: my-image
+      resourceRef:
+        name: my-output
+    - name: my-repo
+      resourceRef:
+        name: my-input

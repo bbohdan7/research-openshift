@@ -28,6 +28,7 @@ spec:
       initContainers:
       - name: git-init
         image: alpine
+        imagePullPolicy: IfNotPresent
         command: ["/bin/sh", "-c"]
         args: ["apk update && apk add git ; git clone https://github.com/zbogdan7/payment-processor /tmp/ "] 
         volumeMounts:
@@ -35,6 +36,7 @@ spec:
           mountPath: /tmp/
       - name: build
         image: maven
+        imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: proj
           mountPath: /tmp/
@@ -42,6 +44,7 @@ spec:
         args: ["mvn --file /tmp/ package"]
       - name: deploy
         image: alpine
+        imagePullPolicy: IfNotPreset
         volumeMounts:
         - name: proj
           mountPath: /tmp/

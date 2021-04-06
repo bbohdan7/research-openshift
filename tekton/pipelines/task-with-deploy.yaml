@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-task
+  namespace: bogdan
+spec:
+  params:
+  - name: my-image
+    type: string
+    default: $(resources.inputs.my-image.url)
+  resources:
+    inputs:
+    - name: my-image
+      type: image
+    - name: my-repo
+      type: git
+  steps:
+  - name: deploy
+    image: bitnami/kubectl
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: credentials
+      mountPath: /credentials
+    script: |
+      kubectl config set-cluster bogdan-kube --server=https://192.168.0.113:6443 --embed-certs --certificate-authority=/credentials/ca.crt
+      kubectl config set-credentials bogdan --token=$(cat /credentials/token)
+      kubectl config set-context my-context --cluster=bogdan-kube --user=bogdan
+      kubectl config use-context my-context
+      
+      kubectl apply -f $(resources.inputs.my-repo.path)/nginx.yaml -nbogdan
+  
+      kubectl get all -nbogdan
+  volumes:
+  - name: credentials
+    secret:
+      secretName: default-token-6zvz5

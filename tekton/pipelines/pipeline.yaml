@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: main-pipeline
+  namespace: bogdan
+spec:
+  resources:
+  - name: my-repo
+    type: git
+  - name: my-image
+    type: image
+  - name: docker-source
+    type: git
+  - name: builtImage
+    type: image
+  tasks:
+  - name: build-image
+    taskRef:
+      name: build-task
+    resources:
+      inputs:
+      - name: docker-source
+        resource: docker-source
+      outputs:
+      - name: builtImage
+        resource: builtImage
+  - name: deploy-app
+    taskRef:
+      name: deploy-task
+    runAfter:
+    - build-image
+    resources:
+      inputs:
+      - name: my-repo
+        resource: my-repo
+      - name: my-image
+        resource: my-image

@@ -9,7 +9,7 @@ spec:
   - name: revision
     value: master
   - name: url
-    value: https://github.com/zbogdan7/payment-processor-frontend
+    value: https://github.com/zbogdan7/wasapp
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource

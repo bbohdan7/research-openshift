@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: build-task-run
+  namespace: bogdan
+spec:
+  taskRef:
+    name: build-task
+  resources:
+    inputs:
+    - name: docker-source
+      resourceRef:
+        name: my-input
+    outputs:
+    - name: builtImage
+      resourceRef:
+        name: my-output
+  
