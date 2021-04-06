@@ -17,7 +17,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: was
-        image: bogdan.reg:31777/wasapp
+        image: myregistry:31777/wasapp
         imagePullPolicy: Always
         ports:
         - containerPort: 9080
@@ -44,7 +44,7 @@ spec:
         args: ["mvn --file /tmp/ package"]
       - name: deploy
         image: alpine
-        imagePullPolicy: IfNotPreset
+        imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: proj
           mountPath: /tmp/
