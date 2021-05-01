@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-writer
+  namespace: bogdan
+  labels:
+    app: ubuntu-writer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu-writer
+  template:
+    metadata:
+      labels:
+        app: ubuntu-writer
+    spec:
+      containers:
+      - name: ubuntu
+        image: ubuntu:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/bash", "-c"]
+        args: ["touch hello.txt /myvolume ; echo helloworld >> /myvolume/hello.txt ; while : ; do echo hello ; sleep 1 ; done ;" ]
+        volumeMounts:
+        - name: myvolume
+          mountPath: "/myvolume"
+      volumes:
+      - name: myvolume
+        persistentVolumeClaim:
+          claimName: pipeline-pvc

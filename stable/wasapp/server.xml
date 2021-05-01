@@ -36,7 +36,7 @@
     <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
 	
     <library id="MySQLLib">
-      <fileset dir="./" includes="mysql-connector-java-5.1.48.jar" />
+      <file id="MySQLLib" name="${shared.resource.dir}/mysql-connector-java-5.1.48.jar" />
     </library>
 
     <dataSource jndiName="jdbc/PaymentDS" transactional="true">

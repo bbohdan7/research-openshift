@@ -20,6 +20,6 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - worker
+          - worker01
 #  hostPath:
 #    path: "/mnt/pipelinestorage"

@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: payment-processor-git
+  namespace: bogdan
+spec:
+  type: git
+  params:
+  - name: url
+    value: https://github.com/zbogdan7/payment-processor
+  - name: revision
+    value: master

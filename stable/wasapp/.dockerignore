@@ -1,0 +1,7 @@
+/target/*/
+/src
+pom.xml
+db.sql
+.gitignore
+.dockerignore
+.git

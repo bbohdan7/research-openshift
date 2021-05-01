@@ -18,10 +18,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: payment-processor-storage-claim
+  namespace: bogdan
 spec:
   storageClassName: manual
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 2Gi
+      storage: 1Gi
