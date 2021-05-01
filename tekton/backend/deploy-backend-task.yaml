@@ -46,7 +46,14 @@ spec:
       kubectl config set-credentials bogdan --token=$(cat /creds/token)
       kubectl config set-context my-context --cluster=my-cluster --user=bogdan --namespace=bogdan
       kubectl config use-context my-context
-      kubectl apply -f $(params.pathContext)/deployment.yaml
+      
+      result=$(kubectl get all -l app=payment-processor)
+
+      if [ -z "$result" ] ; then
+        kubectl apply -f $(params.pathContext)/deployment.yaml
+      else
+        kubectl rollout restart deployment payment-processor
+      fi
   volumes:
   - name: creds
     secret:
