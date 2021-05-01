@@ -4,4 +4,54 @@ metadata:
   name: payment-processor-listener
   namespace: bogdan
 spec:
-  
+  triggers:
+  - name: github-trigger
+    interceptors:
+    - github:
+        eventTypes:
+        - push
+    bindings:
+    - ref: github-trigger-binding
+    template:
+      ref: github-template
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: github-trigger-binding
+  namespace: bogdan
+spec:
+  params:
+  - name: revision
+    value: $(body.after)
+  - name: url
+    value: $(body.repository.html_url)
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-template
+  namespace: bogdan
+spec:
+  params:
+  - name: revision
+  - name: url
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1alpha1
+    kind: TaskRun
+    metadata:
+      generateName: deploy-backend-task-run-
+      namespace: bogdan
+    spec:
+      taskRef:
+        name: deploy-backend-task
+      inputs:
+        resources:
+        - name: payment-processor-backend
+          resourceRef:
+            name: payment-processor-git
+      outputs:
+        resources:
+        - name: wasapp-piped
+          resourceRef:
+            name: wasapp-image

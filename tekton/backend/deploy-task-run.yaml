@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: deploy-backend-task-run-
+  namespace: bogdan
+spec:
+  taskRef:
+    name: deploy-backend-task
+  resources:
+    inputs:
+    - name: payment-processor-backend
+      resourceRef:
+        name: payment-processor-git
+    outputs:
+    - name: wasapp-piped
+      resourceRef:
+        name: wasapp-image
