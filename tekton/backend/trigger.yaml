@@ -48,8 +48,13 @@ spec:
       inputs:
         resources:
         - name: payment-processor-backend
-          resourceRef:
-            name: payment-processor-git
+          resourceSpec:
+            type: git
+            params:
+            - name: revision
+              value: $(tt.params.revision)
+            - name: url
+              value: $(tt.params.url)
       outputs:
         resources:
         - name: wasapp-piped
