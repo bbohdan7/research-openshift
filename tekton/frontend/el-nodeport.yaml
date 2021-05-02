@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: github-front-listener
+  namespace: bogdan
+  labels:
+    eventlistener: payment-processor-frontend-listener
+spec:
+  selector:
+    eventlistener: payment-processor-frontend-listener
+  type: NodePort
+  ports:
+  - port: 8000
+    targetPort: 8000
+    nodePort: 31223

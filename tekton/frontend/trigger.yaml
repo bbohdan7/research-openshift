@@ -1,0 +1,62 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: payment-processor-frontend-listener
+  namespace: bogdan
+spec:
+  triggers:
+  - name: github-front-trigger
+    interceptors:
+    - github:
+        eventTypes:
+        - push
+    bindings:
+    - ref: github-front-trigger-binding
+    template:
+      ref: github-front-trigger-template
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: github-front-trigger-binding
+  namespace: bogdan
+spec:
+  params:
+  - name: revision
+    value: $(body.after)
+  - name: url
+    value: $(body.repository.html_url)
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-front-trigger-template
+  namespace: bogdan
+spec:
+  params:
+  - name: revision
+  - name: url
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1alpha1
+    kind: TaskRun
+    metadata:
+      generateName: deploy-frontend-task-run-
+      namespace: bogdan
+    spec:
+      taskRef:
+        name: deploy-frontend-task
+      inputs:
+        resources:
+        - name: payment-processor-frontend
+          resourceSpec:
+            type: git
+            params:
+            - name: revision
+              value: $(tt.params.revision)
+            - name: url
+              value: $(tt.params.url)
+      outputs:
+        resources:
+        - name: wasapp-frontend
+          resourceRef:
+            name: wasapp-frontend

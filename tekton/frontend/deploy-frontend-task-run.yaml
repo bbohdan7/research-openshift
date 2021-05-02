@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: deploy-frontend-task-run-
+  namespace: bogdan
+spec:
+  taskRef:
+    name: deploy-frontend-task
+  resources:
+    inputs:
+    - name: payment-processor-frontend
+      resourceRef:
+        name: payment-processor-frontend-git
+    outputs:
+    - name: wasapp-frontend
+      resourceRef:
+        name: wasapp-frontend
+      
