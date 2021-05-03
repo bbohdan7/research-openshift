@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: payment-processor-pipeline-run-
+  namespace: bogdan
+spec:
+  pipelineRef:
+    name: payment-processor-pipeline
+  resources:
+  - name: backend-git
+    resourceRef:
+      name: payment-processor-git
+  - name: frontend-git
+    resourceRef:
+      name: payment-processor-frontend-git
+  - name: wasapp-image
+    resourceRef:
+      name: wasapp-image
+  - name: wasapp-front
+    resourceRef:
+      name: wasapp-frontend
+  
