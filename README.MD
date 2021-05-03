@@ -12,3 +12,4 @@ Approximate description of content:
   * **Backend** microservice based on [**WebSphere Liberty**](https://www.ibm.com/cloud/websphere-liberty) application server
   * **Frontend** microservice based on [**Node.js**](https://github.com/nodejs) runtime environment with [**React.js**](https://github.com/facebook/react) library
 * Please refer to the stable [_README.MD_](https://github.com/zbogdan7/research-openshift/blob/master/stable/README.MD) file to see how to deploy all of them and how those work together in more detail
+* [**tekton**](https://github.com/zbogdan7/research-openshift/tree/master/tekton) - Building, pushing and deployment applications using Tekton tasks, pipelines and triggers.
