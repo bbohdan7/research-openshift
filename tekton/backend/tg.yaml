@@ -1,0 +1,58 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: payment-processor-listener
+  namespace: bogdan
+spec:
+  triggers:
+  - name: github-trigger
+    interceptors:
+    - github:
+        eventTypes:
+        - push
+    template:
+      ref: github-template
+    bindings:
+    - ref: github-binding
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: github-binding
+spec:
+  params:
+  - name: committer
+    value: $(body.head_commit.committer.email)
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-template
+  namespace: bogdan
+spec:
+  params:
+  - name: committer
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+       generateName: all-pipeline-run- 
+    spec:
+      pipelineRef:
+        name: payment-processor-pipeline
+      params:
+      - name: committer
+        value: $(tt.params.committer) 
+      resources:
+      - name: backend-git
+        resourceRef:
+          name: payment-processor-git
+      - name: frontend-git
+        resourceRef:
+          name: payment-processor-frontend-git
+      - name: wasapp-image
+        resourceRef:
+          name: wasapp-image
+      - name: wasapp-front
+        resourceRef:
+          name: wasapp-frontend

@@ -25,7 +25,7 @@ spec:
     securityContext:
       privileged: true
     script: |
-      buildah bud --tag=$(resources.outputs.wasapp-frontend.url) --file=$(params.dockerfile) --tls-verify=false $(params.pathContext)
+      buildah bud --tag=$(resources.outputs.wasapp-frontend.url) --file=$(params.dockerfile) $(params.pathContext)
       buildah push --tls-verify=false $(resources.outputs.wasapp-frontend.url)
   - name: deploy
     image: bitnami/kubectl
@@ -36,13 +36,13 @@ spec:
     - name: creds
       mountPath: /creds
     script: |
-      ls -alt /creds
-      kubectl config set-cluster my-cluster --server=https://192.168.0.131:6443 --embed-certs --certificate-authority=/creds/ca.crt
-      kubectl config set-credentials bogdan --token=$(cat /creds/token)
-      kubectl config set-context my-context --cluster=my-cluster --user=bogdan --namespace=bogdan
-      kubectl config use-context my-context
+      #ls -alt /creds
+      #kubectl config set-cluster my-cluster --server=https://192.168.0.131:6443 --embed-certs --certificate-authority=/creds/ca.crt
+      #kubectl config set-credentials bogdan --token=$(cat /creds/token)
+      #kubectl config set-context my-context --cluster=my-cluster --user=bogdan --namespace=bogdan
+      #kubectl config use-context my-context
       
-      result=$(kubectl get all -l app=payment-processor-frontend)
+      result=$(kubectl get deployment -l app=payment-processor-frontend)
       if [ -z "$result" ] ; then
         kubectl apply -f $(params.pathContext)/deployment.yaml
       else

@@ -4,6 +4,10 @@ metadata:
   name: payment-processor-pipeline
   namespace: bogdan
 spec:
+  params:
+  - name: committer
+    type: string
+    default: "DefaultCommitter"
   resources:
   - name: backend-git
     type: git
@@ -14,7 +18,7 @@ spec:
   - name: wasapp-front
     type: image
   tasks:
-  - name: backend
+  - name: backend-deploy
     taskRef:
       name: deploy-backend-task
     resources:
@@ -24,15 +28,23 @@ spec:
       outputs:
       - name: wasapp-piped
         resource: wasapp-image
-  - name: frontend
-    runAfter:
-    - backend
-    taskRef:
+  - name: frontend-deploy
+    taskRef: 
       name: deploy-frontend-task
+    runAfter:
+    - backend-deploy
     resources:
       inputs:
       - name: payment-processor-frontend
         resource: frontend-git
       outputs:
       - name: wasapp-frontend
-        resource: wasapp-front  
+        resource: wasapp-front
+  - name: middleware-task
+    taskRef: 
+      name: middleware-task
+    runAfter:
+    - frontend-deploy
+    params:
+    - name: committer
+      value: $(params.committer)
