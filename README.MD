@@ -13,3 +13,5 @@ Approximate description of content:
   * **Frontend** microservice based on [**Node.js**](https://github.com/nodejs) runtime environment with [**React.js**](https://github.com/facebook/react) library
 * Please refer to the stable [_README.MD_](https://github.com/zbogdan7/research-openshift/blob/master/stable/README.MD) file to see how to deploy all of them and how those work together in more detail
 * [**tekton**](https://github.com/zbogdan7/research-openshift/tree/master/tekton) - Building, pushing and deployment applications using Tekton tasks, pipelines and triggers.
+* [**Ingress-Nginx**](https://github.com/zbogdan7/research-openshift/tree/master/ingress-nginx) - Accessing your cluster with Ingress using Ingress controller - Ingress-Nginx.
+* [**MetalLB**](https://github.com/zbogdan7/research-openshift/tree/master/metallb) - Creating Bare-metal load balancers with MetalLB.

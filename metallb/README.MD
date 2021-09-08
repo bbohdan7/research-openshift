@@ -3,6 +3,6 @@
 ## First of all you need to do next:
 1. Modify kube-proxy configmap and specify ```mode: "ipvs"``` and ```ipvs: strictARP: true```
 2. Install by manifest from [MetalLB](https://metallb.universe.tf/installation/) official website
-3. Apply metallb-cm.yaml which contains address pool which will be obtained by LoadBalancers to be created.
+3. Apply [metallb-cm.yaml](https://github.com/zbogdan7/research-openshift/blob/master/metallb/metallb-cm.yaml) which contains address pool which will be obtained by LoadBalancers to be created.
 
 ### Enjoy!
