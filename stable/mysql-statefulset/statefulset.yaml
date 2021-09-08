@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-db
+spec:
+  serviceName: mysql-db
+  selector:
+    matchLabels:
+      app: mysql-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql-db
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mysql
+        image: mysql:latest
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-db-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-db-migration
+          mountPath: /migration
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-root-password
+              key: password
+      volumes:
+      - name: mysql-db-migration
+        configMap:
+          name: mysql-db-migration
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-db-storage
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      storageClassName: ocs-storagecluster-ceph-rbd
+      resources:
+        requests:
+          storage: 1Gi
