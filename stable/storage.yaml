@@ -5,22 +5,19 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual
   capacity:
     storage: 2Gi
   accessModes:
   - ReadWriteOnce
   hostPath:
-    path: "/mnt/paymentstorage"
+    path: "/mnt/payment-processor-storage"
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: payment-processor-storage-claim
-  namespace: bogdan
 spec:
-  storageClassName: manual
   accessModes:
   - ReadWriteOnce
   resources:

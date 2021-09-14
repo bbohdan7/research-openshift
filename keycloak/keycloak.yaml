@@ -5,7 +5,6 @@ metadata:
   labels:
     app: keycloak
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: keycloak
@@ -16,8 +15,13 @@ spec:
     spec:
       containers:
       - name: keycloak
-        image: localhost:31777/keycloak
+        image: 192.168.0.132/keycloak
         imagePullPolicy: Always
+        env:
+        - name: KEYCLOAK_USER
+          value: admin
+        - name: KEYCLOAK_PASSWORD
+          value: admin_123
         ports:
         - containerPort: 8080
         - containerPort: 9990

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: registry-app
+  namespace: default
   labels:
     app: registry-app
 spec:
@@ -24,9 +25,9 @@ spec:
         - name: REGISTRY_HTTP_ADDR
           value: 0.0.0.0:443
         - name: REGISTRY_HTTP_TLS_CERTIFICATE
-          value: /cert/domain.crt
+          value: /cert/registry.crt
         - name: REGISTRY_HTTP_TLS_KEY
-          value: /key/domain.key
+          value: /key/registry.key
         volumeMounts:
         - name: reg-cert
           mountPath: /cert

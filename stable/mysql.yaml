@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: payment-processor-mysql
-  namespace: bogdan
   labels:
     app: payment-processor-mysql
 spec:
@@ -25,11 +24,11 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-root-credentials
+              name: mysql-credentials
               key: password
         volumeMounts:
         - name: migration
-          mountPath: /migration
+          mountPath: /initial-db-migration
         - name: main-storage
           mountPath: /var/lib/mysql
         ports:
@@ -38,7 +37,7 @@ spec:
       volumes:
       - name: migration
         configMap:
-          name: mysql-db-migration
+          name: mysql-initial-migration
       - name: main-storage
         persistentVolumeClaim:
           claimName: payment-processor-storage-claim
