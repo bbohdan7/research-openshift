@@ -1,0 +1,54 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: kotlapp-deploy
+  namespace: bogdan
+spec:
+  resources:
+    inputs:
+    - name: kotlapp-source
+      type: git
+    outputs:
+    - name: kotlapp
+      type: image
+  params:
+  - name: pathContext
+    type: string
+    default: $(resources.inputs.kotlapp-source.path)
+  - name: dockerfile
+    type: string
+    default: $(resources.inputs.kotlapp-source.path)/Dockerfile  
+  steps:
+  - name: maven
+    image: 'maven:3.6.3-openjdk-11'
+    imagePullPolicy: IfNotPresent
+    script: |
+      mvn clean package --file $(params.pathContext)
+  - name: buildah
+    image: buildah/buildah
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      privileged: true
+    script: |
+      buildah bud --tag=$(resources.outputs.kotlapp.url) --file=$(params.dockerfile) $(params.pathContext)
+      buildah push --tls-verify=false $(resources.outputs.kotlapp.url)
+  - name: deploy
+    image: bitnami/kubectl
+    imagePullPolicy: IfNotPresent
+#    securityContext:
+#      privileged: true
+    script: |
+      #kubectl config set-cluster my-cluster --server=https://192.168.0.131:6443 --embed-certs --certificate-authority=/creds/ca.crt
+      #kubectl config set-credentials bogdan --token=$(cat /creds/token)
+      #kubectl config set-context my-context --cluster=my-cluster --user=bogdan --namespace=bogdan
+      #kubectl config use-context my-context
+
+      kubectl get all -owide    
+ 
+      result=$(kubectl get all --selector=app=kotlapp)
+    
+      if [ -z "$result" ] ; then
+        kubectl apply -f $(params.pathContext)/deployment.yaml
+      else
+        kubectl rollout restart deployment kotlapp
+      fi  

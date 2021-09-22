@@ -1,0 +1,62 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: kotlapp-listener
+  namespace: bogdan
+spec:
+  triggers:
+  - name: kotlapp-trigger
+    interceptors:
+    - github:
+        eventTypes:
+        - push
+    bindings:
+    - ref: kotlapp-binding
+    template:
+      ref: kotlapp-template
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: kotlapp-binding
+  namespace: bogdan
+spec:
+  params:
+  - name: revision
+    value: $(body.after)
+  - name: url
+    value: $(body.repository.html_url)
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: kotlapp-template
+  namespace: bogdan
+spec:
+  params:
+  - name: revision
+  - name: url
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1alpha1
+    kind: TaskRun
+    metadata:
+      generateName: kotlapp-deploy-run-
+      namespace: bogdan
+    spec:
+      taskRef:
+        name: kotlapp-deploy
+      inputs:
+        resources:
+        - name: kotlapp-source
+          resourceSpec:
+            type: git
+            params:
+            - name: revision
+              value: $(tt.params.revision)
+            - name: url
+              value: $(tt.params.url)
+      outputs:
+        resources:
+        - name: kotlapp
+          resourceRef:
+            name: kotlapp-image

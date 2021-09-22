@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: kotlapp-source
+  namespace: bogdan
+spec:
+  type: git
+  params:
+  - name: url
+    value: https://github.com/zbogdan7/kotl
+  - name: revision
+    value: master

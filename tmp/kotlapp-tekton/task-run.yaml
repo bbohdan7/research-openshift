@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: kotlapp-deploy-run-
+  namespace: bogdan
+spec:
+  taskRef:
+    name: kotlapp-deploy
+  resources:
+    inputs:
+    - name: kotlapp-source
+      resourceRef:
+        name: kotlapp-source
+    outputs:
+    - name: kotlapp
+      resourceRef:
+        name: kotlapp-image
+
