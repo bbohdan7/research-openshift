@@ -25,9 +25,9 @@ spec:
         - name: REGISTRY_HTTP_ADDR
           value: 0.0.0.0:443
         - name: REGISTRY_HTTP_TLS_CERTIFICATE
-          value: /cert/registry.crt
+          value: /cert/domain.crt
         - name: REGISTRY_HTTP_TLS_KEY
-          value: /key/registry.key
+          value: /key/domain.key
         volumeMounts:
         - name: reg-cert
           mountPath: /cert

@@ -9,8 +9,9 @@ spec:
     storage: 2Gi
   accessModes:
   - ReadWriteOnce
-  hostPath:
-    path: "/mnt/payment-processor-storage"
+  nfs:
+    server: 192.168.0.107
+    path: "/home/worker1/shared/mysqldb"
 
 ---
 apiVersion: v1

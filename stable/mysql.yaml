@@ -37,7 +37,7 @@ spec:
       volumes:
       - name: migration
         configMap:
-          name: mysql-initial-migration
+          name: mysql-initial-db
       - name: main-storage
         persistentVolumeClaim:
           claimName: payment-processor-storage-claim
