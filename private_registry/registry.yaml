@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: registry-app
-  namespace: default
   labels:
     app: registry-app
 spec:
