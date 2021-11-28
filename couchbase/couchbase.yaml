@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: couchbase
+  labels:
+    app: couchbase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: couchbase
+  template:
+    metadata:
+      labels:
+        app: couchbase
+    spec:
+      containers:
+      - name: couchbase
+        image: couchbase
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: first
+          containerPort: 8091
+        - name: second
+          containerPort: 8092
+        - name: third
+          containerPort: 8093
+        - name: forth
+          containerPort: 8094
+        - name: last
+          containerPort: 11210
+          
