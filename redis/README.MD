@@ -42,6 +42,6 @@ Inside the Pod's container run `redis-cli` commmand.
 
 ## In the above sections I've depicted mostly used commands inside **redis-cli** CLI utility.
 
-## There is another cool CLI utility to test performance called **redis-benchmark** which calculates data representing how performant your Redis server is.
+## There is another cool CLI utility to test performance called `**redis-benchmark**` which calculates data representing how performant your Redis server is. Just run `$> redis-benchmark`, also, type --help if you need additional parameters supplied with it.
 
 # Enjoy!
