@@ -16,6 +16,6 @@ All opeartions can be performed via Web UI listening on port 8091. There is a sp
   * You should understand that id isn't stored inside your Bucket's document directly, instead it exists as metadata, and this one can be accessed via **meta().id** and has a type of VARCHAR, to convert it to the NUMERIC type just take it into TONUMBER() as this: `cbq> SELECT * FROM bucket WHERE **TONUMBER(meta().id) = 10**`
 
 ### There are problems to fetch all first time because it prints out an error that there is no any primary indexes, to resolve this just run this query inside cbq CLI utility:
-`cbq>CREATE PRIMARY INDEX ON \\`default\\`:\\`bucket\\`;`
+`cbq>CREATE PRIMARY INDEX ON \`default\`:\`bucket\`;`
 
 ## Enjoy!
