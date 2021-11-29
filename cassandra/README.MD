@@ -13,9 +13,9 @@ This deployment is very simple, it is based on Docker Hub's Cassandra image addi
 ### You may encounter on several errors while doing selections, here are some of them:
 * `cqlsh> SELECT id, name FROM users WHERE id = 5` - OK, won't cause an error.
 * `cqlsh> SELECT id, name FROM users WHERE id >= 5` - No, it'll cause error because Cassandra doesn't allow to use filtering using relational operators explicitly, to allow this do this: `cqlsh> SELECT id, name FROM users WHERE id >= 5 **ALLOW FILTERING**`
-* `cqlsh> SELECT id, name, email FROM users WHERE name LIKE '%John%'` - Throws an error because there is no any indexes which will allow doing searching using mode - CONTAINS. In order to allow this you should add a custom index: `cqlsh> CREATE CUSTOM INDEX IF NOT EXISTS ix_users_name ON users (name) USING 'org.apache.cassandra.index.sasi.SASIIndex'` WITH OPTIONS = { 'mode' : 'CONTAINS', 'analyzed': 'true', 'analyzer_class' : 'org.apache.cassandra.index.sasi.analyzer.StandardAnalyzer' }`;
+* `cqlsh> SELECT id, name, email FROM users WHERE name LIKE '%John%'` - Throws an error because there is no any indexes which will allow doing searching using mode - CONTAINS. In order to allow this you should add a custom index: `cqlsh> CREATE CUSTOM INDEX IF NOT EXISTS ix_users_name ON users (name) USING 'org.apache.cassandra.index.sasi.SASIIndex' WITH OPTIONS = { 'mode' : 'CONTAINS', 'analyzed': 'true', 'analyzer_class' : 'org.apache.cassandra.index.sasi.analyzer.StandardAnalyzer' }`;
 
 ### To delete everything from the table do this: `cqlsh> TRUNCATE users;`
 There are cases when we need to print information about our Cassandra database, in order to do this type this command from outside **cqlsh** CLI utility but using tool called *nodetool*, e.g. `$> nodetool status` and you'll see an information about your server with data center information which can be used inside applications like SpringBoot.
 
-## Enjoy
+## Enjoy!
