@@ -24,7 +24,7 @@ Inside the Pod's container run `redis-cli` commmand.
 ### Working with Lists
 
 * `127.0.0.1:6379> LPUSH users "Julia"` - adds "Julia" value into users of type List, now it looks like users = ("Julia"). When you add another one `127.0.0.1:6379> LPUSH users "Victoria"` it becomes users = ("Julia", "Victoria") and so on.
-* `127.0.0.1:6379> LRANGE users 0 10`` - prints ranged results from the users List.
+* `127.0.0.1:6379> LRANGE users 0 10` - prints ranged results from the users List.
 * `127.0.0.1:6379> LREM users 1 "Julia"` - removes element "Julia" from the users List. 1 - means count of occurences, if there are many "Julia" deleted will be only one.
 
 ### Working with Sets
