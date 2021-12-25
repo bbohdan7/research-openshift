@@ -24,7 +24,7 @@ spec:
     imagePullPolicy: IfNotPresent
     name: build
     script: |
-      mvn clean package --file /workspace/payment-processor-backend
+      mvn clean package --file $(params.pathContext)
   - name: push
     image: buildah/buildah
     imagePullPolicy: IfNotPresent
@@ -37,20 +37,11 @@ spec:
     image: bitnami/kubectl
     securityContext:
       privileged: true
-    volumeMounts:
-    - name: creds
-      mountPath: /creds
     script: |
-      kubectl get all
-
-      result=$(kubectl get all -l app=payment-processor)
+      result=$(kubectl get deploy -l app=payment-processor-backend)
 
       if [ -z "$result" ] ; then
         kubectl apply -f $(params.pathContext)/deployment.yaml
       else
-        kubectl rollout restart deployment payment-processor
+        kubectl rollout restart deployment payment-processor-backend
       fi
-  volumes:
-  - name: creds
-    secret:
-      secretName: default-token-mqfmg  

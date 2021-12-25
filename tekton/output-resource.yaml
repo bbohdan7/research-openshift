@@ -7,4 +7,4 @@ spec:
   type: image
   params:
   - name: url
-    value: bogdan.reg:31777/tekton-wasapp
+    value: registry-app.registry.svc.cluster.local/payment-processor-backend

@@ -24,7 +24,7 @@ spec:
         - name: REGISTRY_HTTP_ADDR
           value: 0.0.0.0:443
         - name: REGISTRY_HTTP_TLS_CERTIFICATE
-          value: /cert/domain.crt
+          value: /cert/domain.cert
         - name: REGISTRY_HTTP_TLS_KEY
           value: /key/domain.key
         volumeMounts:

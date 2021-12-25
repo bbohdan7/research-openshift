@@ -4,9 +4,33 @@ metadata:
   name: task-first
   namespace: bogdan
 spec:
+  params:
+  - name: firstPerson
+    type: string
+    default: "Oleg"
+  - name: secondPerson
+    type: string
+    default: "Sergey"
+  sidecars:
+  - name: nginx
+    image: nginx:latest
+    script: |
+      echo "Hello from sidecar..."
   steps:
   - name: greet
     image: alpine
     command: ["echo"]
-    args: ["hello, world"]
+    args: ["hello, ", "$(params.secondPerson), my name is ", "$(params.firstPerson)"]
+  - name: say
+    image: alpine
+    script: |
+      echo "I'm doing fine! =)))"
+      echo "And How are you?"
+      if [ "$(params.secondPerson)" != "Vasyl" ] ; then
+        exit 1
+      fi;
+  - name: goodbye
+    image: alpine
+    script: |
+      echo "Goodbye!!!"
    
