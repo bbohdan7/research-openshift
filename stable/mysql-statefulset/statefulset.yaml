@@ -25,7 +25,10 @@ spec:
           mountPath: /var/lib/mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: root
+          valueFrom:
+            secretKeyRef:
+              name: mysql-credentials
+              key: password
   volumeClaimTemplates:
   - metadata:
       name: mysql-db-pvc

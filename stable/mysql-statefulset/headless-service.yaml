@@ -5,10 +5,9 @@ metadata:
   labels:
     app: mysql-db
 spec:
+  selector:
+    app: mysql-db
   ports:
   - name: mysql
     port: 3306
   clusterIP: None
-  selector:
-    app: mysql-db
-    
