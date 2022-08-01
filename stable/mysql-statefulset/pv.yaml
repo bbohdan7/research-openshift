@@ -8,5 +8,5 @@ spec:
   accessModes:
   - ReadWriteOnce
   nfs:
-    server: 192.168.0.107
+    server: 192.168.0.141
     path: /home/worker1/shared/mysql-db-statefulset
