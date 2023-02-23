@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vault
+  namespace: bogdan
+spec:
+  selector:
+    matchLabels:
+      app: vault
+  serviceName: "vault"
+  replicas: 1
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: vault
+        image: vault:latest
+        ports:
+        - name: vault 
+          containerPort: 8200
+        volumeMounts:
+        - name: vault
+          mountPath: /vault/config
+        - name: vault
+          mountPath: /vault/data
+        env:
+        - name: VAULT_DEV_LISTEN_ADDRESS
+          value: "0.0.0.0:8200"
+        - name: VAULT_DEV_ROOT_TOKEN
+          value: "admi_123"
+        securityContext:
+          capabilities:
+            add:
+            - IPC_LOCK
+          privileged: true
+  volumeClaimTemplates:
+  - metadata:
+      name: vault
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 2Gi
