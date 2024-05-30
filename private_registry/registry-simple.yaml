@@ -25,16 +25,14 @@ spec:
         - name: REGISTRY_HTTP_ADDR
           value: 0.0.0.0:443
         - name: REGISTRY_HTTP_TLS_CERTIFICATE
-          value: /cert/registry.crt
+          value: /cert/domain.crt
         - name: REGISTRY_HTTP_TLS_KEY
-          value: /key/registry.key
+          value: /key/domain.key
         volumeMounts:
         - name: reg-cert
           mountPath: /cert
         - name: reg-key
           mountPath: /key
-        - name: main-storage
-          mountPath: "/var/lib/registry"
       volumes:
       - name: reg-cert
         configMap:
@@ -42,6 +40,3 @@ spec:
       - name: reg-key
         configMap:
           name: registry-key 
-      - name: main-storage
-        persistentVolumeClaim:
-          claimName: registry-storage-claim

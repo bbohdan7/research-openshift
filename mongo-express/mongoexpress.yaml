@@ -21,7 +21,10 @@ spec:
         - containerPort: 8081
         env:
         - name: "ME_CONFIG_MONGODB_SERVER"
-          value: "mongodb.bogdan.svc.cluster.local"
+          value: "mongodb"
         - name: "ME_CONFIG_MONGODB_PORT"
           value: "27017"
-  
+        - name: "ME_CONFIG_BASICAUTH_USERNAME"
+          value: "admin"
+        - name: "ME_CONFIG_BASICAUTH_PASSWORD"
+          value: "bogdan_123"

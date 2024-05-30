@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql-db-pv
+  name: postgres-storage
 spec:
   capacity:
     storage: 1Gi
@@ -9,4 +9,4 @@ spec:
   - ReadWriteOnce
   nfs:
     server: 172.18.47.242
-    path: /home/worker01/shared/mysqldb
+    path: /home/worker01/shared/postgres
